@@ -1,5 +1,8 @@
 #Красно-черное дерево
 
+import random
+import sys
+
 class Node():
     def __init__(self, item):
         self.item = item
@@ -18,25 +21,51 @@ class Tree():
         self.nullNode.right = None
         self.root = self.nullNode
 
-    def printTree():
-        printNode(self.root, False)
+    def printTree(self):
+        self.printNode(self.root, True)
 
-    space = ""
 
-    def printNode(node, isLeft):
-        if node != nullNode:
-            print(space)
+    def printNode(self, node, isLeft, space = ""):
+        if node != None:
+            sys.stdout.write(space)
             if isLeft:
-                print("L-----")
+                sys.stdout.write("L-----")
                 space += "|    "
             else:
-                print("R-----")
+                sys.stdout.write("R-----")
                 space += "     "
 
+            print(node.item, "(", colors[node.color], ")")
+            self.printNode(node.left, True, space)
+            self.printNode(node.right, False, space)     
+                   
 
-        print(node.item, "(", colors[node.color], ")")
-        printNode(node.left, True)
-        printNode(node.right, False)            
+    def insertItem(self, item):
+        current = self.root
+        parent = None
+        isLeft = True
 
-     
-       
+        while current != None:
+            if item >= current.item:     
+                parent = current   
+                current = current.right
+                isLeft = False
+            else:
+                parent = current
+                current = current.left
+                isLeft = True
+
+
+        current = Node(item)
+        current.parent = parent
+        if isLeft:
+            current.parent.left = current
+        else:
+            current.parent.right = current
+
+        
+t = Tree()
+n = int(input("введите n: "))
+for i in range(n):
+    t.insertItem(random.randint(2,40))
+t.printTree()
