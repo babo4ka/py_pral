@@ -100,6 +100,10 @@ class Tree():
                 if node == self.root:
                     break
         self.root.color = 0
+
+
+    def leftRotate(self, x):
+        
                 
 
 
