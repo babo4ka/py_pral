@@ -62,6 +62,46 @@ class Tree():
             current.parent.left = current
         else:
             current.parent.right = current
+        self.insertFix(current)
+
+    
+
+    def insertFix(self, node):
+        while node.parent.color == 1:
+            if node.parent == node.parent.parent.right:
+                uncle = node.parent.parent.left
+                if uncle.color == 1:
+                    uncle.color = 0
+                    node.parent.color = 0
+                    node.parent.parent.color = 1
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.left:
+                        node = node.parent
+                        self.rightRotate(node)
+                    node.parent.color = 0
+                    node.parent.parent.color = 0
+                    self.leftRotate(node.parent.parent)
+            else:
+                uncle = node.parent.parent.right
+
+                if uncle.color == 1:
+                    uncle.color = 0
+                    node.parent.color = 0
+                    node.parent.parent = 1
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.right:
+                        node = node.parent
+                        self.leftRotate(node)
+                    node.parent.color = 0
+                    node.parent.parent.color = 1
+                    self.rightRotate(node.parent.parent)
+                if node == self.root:
+                    break
+        self.root.color = 0
+                
+
 
         
 t = Tree()
