@@ -10,7 +10,6 @@ for i in range(n):
 print("исходный массив: ", numbersList)
 
 
-
 def sort(numsList):
     if(len(numsList) == 0):
         return numsList
@@ -31,6 +30,5 @@ def sort(numsList):
 
     return(sort(left) + pivots + sort(right))
 
-    
 print("результат: ", sort(numbersList))
 
