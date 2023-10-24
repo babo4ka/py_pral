@@ -11,24 +11,25 @@ print("исходный массив: ", numbersList)
 
 
 def sort(numsList):
-    if(len(numsList) == 0):
+    if(len(numsList) < 2): #если длина массива меньше двух, то возвращается массив
         return numsList
-    pivot = numsList[0]
-    pivots = list()
-    left = list()
-    right = list()
+
+    pivot = numsList[0] #опорным элементом выбирается первый элемент массива
+    pivots = list() #массив значений равных опорному элементу
+    left = list() #массив значений меньше опорного элемента
+    right = list() #масси значений больше опорного элемента
 
     for i in numsList:
         if i < pivot:
-            left.append(i)
+            left.append(i) #если элемент меньше опорного, записываем в массив left
 
         elif i > pivot:
-            right.append(i)
+            right.append(i) #если больше - в массив right
 
         else:
-            pivots.append(i)
+            pivots.append(i) #если равен - в массив pivots
 
-    return(sort(left) + pivots + sort(right))
+    return(sort(left) + pivots + sort(right)) #снова вызываем функцию для левой и правой части
 
 print("результат: ", sort(numbersList))
 

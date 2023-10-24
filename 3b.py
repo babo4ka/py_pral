@@ -3,7 +3,7 @@
 import random
 import sys
 
-class Node():
+class Node():#класс для узла дерева
     def __init__(self, item):
         self.item = item
         self.parent = None
@@ -13,7 +13,7 @@ class Node():
 
 colors = ["черное", "красное"]
 
-class Tree():
+class Tree():#класс дерева
     def __init__(self):
         self.nullNode = Node(0)
         self.nullNode.color = 0
@@ -25,7 +25,7 @@ class Tree():
         self.printNode(self.root, False)
 
 
-    def printNode(self, node, isLeft, space = ""):
+    def printNode(self, node, isLeft, space = ""):#функция для вывода узла дерева
         if node != self.nullNode:
             sys.stdout.write(space)
             if isLeft:
@@ -40,8 +40,9 @@ class Tree():
             self.printNode(node.right, False, space)     
                    
 
-    def insertItem(self, item):
-        newNode = Node(item)
+    def insertItem(self, item):#функция вставки элемента
+        print("вставка ", item)
+        newNode = Node(item)#создаем новый узел с заданным значением
         newNode.left = self.nullNode
         newNode.right = self.nullNode
         newNode.parent = None
@@ -51,7 +52,7 @@ class Tree():
         current = self.root
         parent = None
 
-        while current != self.nullNode:
+        while current != self.nullNode:#ищем место для вставки нового узла
             parent = current   
             if newNode.item < current.item:     
                 current = current.left
@@ -74,22 +75,28 @@ class Tree():
 
         if newNode.parent.parent == None:
             return
-        
+        print("до балансировки")
+        self.printTree()
         self.balanceInsert(newNode)
+        print("после балансировки")
+        self.printTree()
 
     
 
-    def balanceInsert(self, node):
+    def balanceInsert(self, node):#балансировка после вставки
         while node.parent.color == 1:
             if node.parent == node.parent.parent.right:
                 uncle = node.parent.parent.left
-                if uncle.color == 1:
-                    uncle.color = 0
+                if uncle.color == 1: 
+                    #перекрашиваем отца и дядю в черный, деда - в красный, если дядя и отец красные
+                    uncle.color = 0 
                     node.parent.color = 0
                     node.parent.parent.color = 1
                     node = node.parent.parent
                 else:
+                    #если дядя черный, выполняем левый поворот
                     if node == node.parent.left:
+                        #если добавляемый узел был левым потомком, сначала выполняем правый поворот
                         node = node.parent
                         self.rightRotate(node)
                     node.parent.color = 0
@@ -97,14 +104,16 @@ class Tree():
                     self.leftRotate(node.parent.parent)
             else:
                 uncle = node.parent.parent.right
-
                 if uncle.color == 1:
+                    #перекрашиваем отца и дядю в черный, деда - в красный, если дядя и отец красные
                     uncle.color = 0
                     node.parent.color = 0
                     node.parent.parent.color = 1
                     node = node.parent.parent
                 else:
+                    #если дядя черный, выполняем правый поворот
                     if node == node.parent.right:
+                        #если добавляемый узел был правым потомком, сначала выполняем левый поворот
                         node = node.parent
                         self.leftRotate(node)
                     node.parent.color = 0
@@ -116,9 +125,11 @@ class Tree():
         self.root.color = 0
 
     def deleteItem(self, item):
+        print("удаление ", item)
         z = self.nullNode
         node = self.root
         while node != self.nullNode:
+            #ищем узел с указанным значением
             if node.item == item:
                 z = node
                 break
@@ -133,11 +144,13 @@ class Tree():
             return
 
         if z.left == self.nullNode and z.right == self.nullNode:
+            #если узел не имеет потомков, просто удаляем узел
             if z.parent.left == z:
                 z.parent.left = self.nullNode
             elif z.parent.right == z:
                 z.parent.right = self.nullNode
         elif z.left == self.nullNode or z.right == self.nullNode:
+            #если имеет одного потомка, передаем родителю ссылку на его потомка
             if z.parent.parent.left == z.parent:
                 z.parent.parent.left = z
             elif z.parent.parent.right == z.parent:
@@ -146,6 +159,7 @@ class Tree():
             if z.color == 1 and z.parent.color == 1:
                 z.color = 0
         else:
+            #если у узла два потомка, то меняем его местами с ближайшим бОльшим узлом и удаляем
             y = z.right
             while y.left != self.nullNode:
                 y = y.left
@@ -163,7 +177,11 @@ class Tree():
                 else:
                     y.parent.left = y.right
             if y_color == 0:
+                print("до балансировки")
+                self.printTree()
                 self.balanceDelete(y_parent)
+                print("после балансировки")
+                self.printTree()
 
 
     def balanceDelete(self, x):
@@ -171,16 +189,20 @@ class Tree():
             if x == x.parent.left:
                 s = x.parent.right
                 if s.color == 1:
+                    #если брат узла красный, то выполняем левый поворот
                     s.color = 0
                     x.parent.color = 1
                     self.leftRotate(x.parent)
                     s = x.parent.right
  
                 if s.left.color == 0 and s.right.color == 0:
+                    #если оба потомка брата черные, красим брата в красный и переходим к родителю узла
                     s.color = 1
                     x = x.parent
                 else:
                     if s.right.color == 0:
+                        #если правый потомок брата черный, перекрашиваем брата и его левого потомка 
+                        #и выполняем парвый поворот
                         s.left.color = 0
                         s.color = 1
                         self.rightRotate(s)
@@ -219,35 +241,41 @@ class Tree():
 
 
     def leftRotate(self, x):
+        #перемещаем левого потомка правого потомка узла на позицию правого потомка узла
         y = x.right
         x.right = y.left
         if y.left != self.nullNode:
             y.left.parent = x
  
         y.parent = x.parent
+        #перемещаем правого потомка узла на позицию потомка родителя узла
         if x.parent == None:
+            #если узел был корнем, правый потомок узла становится корнем
             self.root = y
         elif x == x.parent.left:
             x.parent.left = y
         else:
             x.parent.right = y
-        y.left = x
+        y.left = x#перемещаем узел на позицию левого потомка правого потомка узла
         x.parent = y
                 
     def rightRotate(self, x):
+        #перемещаем правого потомка левого потомка узла на позицию левого потомка узла
         y = x.left
         x.left = y.right
         if y.right != self.nullNode:
             y.right.parent = x
  
         y.parent = x.parent
+        #перемещаем левого потомка узла на позицию потомка родителя узла
         if x.parent == None:
+            #если узел был корнем, левый потомок узла становится корнем
             self.root = y
         elif x == x.parent.right:
             x.parent.right = y
         else:
             x.parent.left = y
-        y.right = x
+        y.right = x#перемещаем узел на позицию правого потомка левого потомка узла
         x.parent = y
 
 
