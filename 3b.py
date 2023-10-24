@@ -22,7 +22,7 @@ class Tree():
         self.root = self.nullNode
 
     def printTree(self):
-        self.printNode(self.root, True)
+        self.printNode(self.root, False)
 
 
     def printNode(self, node, isLeft, space = ""):
@@ -53,10 +53,10 @@ class Tree():
 
         while current != self.nullNode:
             parent = current   
-            if newNode.item >= current.item:     
-                current = current.right
-            else:
+            if newNode.item < current.item:     
                 current = current.left
+            else:
+                current = current.right
 
         newNode.parent = parent
 
@@ -69,14 +69,13 @@ class Tree():
 
 
         if newNode.parent == None:
-            current.color = 0
+            newNode.color = 0
             return
 
         if newNode.parent.parent == None:
             return
         
-        # if current != self.root:
-        self.balanceInsert(current)
+        self.balanceInsert(newNode)
 
     
 
@@ -102,7 +101,7 @@ class Tree():
                 if uncle.color == 1:
                     uncle.color = 0
                     node.parent.color = 0
-                    node.parent.parent = 1
+                    node.parent.parent.color = 1
                     node = node.parent.parent
                 else:
                     if node == node.parent.right:
@@ -111,8 +110,9 @@ class Tree():
                     node.parent.color = 0
                     node.parent.parent.color = 1
                     self.rightRotate(node.parent.parent)
-                if node == self.root:
-                    break
+
+            if node == self.root:
+                break
         self.root.color = 0
 
     def deleteItem(self, item):
@@ -121,6 +121,7 @@ class Tree():
         while node != self.nullNode:
             if node.item == item:
                 z = node
+                break
 
             if node.item <= item:
                 node = node.right
@@ -148,12 +149,21 @@ class Tree():
             y = z.right
             while y.left != self.nullNode:
                 y = y.left
-            z.item, y.item = y.item, z.item
+            z.item = y.item
             y_color = y.color
             y_parent = y.parent
-            deleteItem(y.item)        
+            if y.right == self.nullNode:
+                if y.item >= y.parent.item:
+                    y.parent.right = self.nullNode
+                else:
+                    y.parent.left = self.nullNode
+            else:
+                if y.item >= y.parent.item:
+                    y.parent.right = y.right
+                else:
+                    y.parent.left = y.right
             if y_color == 0:
-                balanceDelete(y_parent)
+                self.balanceDelete(y_parent)
 
 
     def balanceDelete(self, x):
@@ -245,7 +255,10 @@ class Tree():
 t = Tree()
 n = int(input("введите n: "))
 for i in range(n):
-    t.insertItem(random.randint(2,40))
-    # t.insertItem(int(input("введите: ")))
-
+    t.insertItem(random.randint(2,150))
 t.printTree()
+
+for i in range(5):
+    a = int(input("число для удаления: "))
+    t.deleteItem(a)
+    t.printTree()
