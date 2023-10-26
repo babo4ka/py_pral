@@ -56,8 +56,11 @@ class Tree():#класс дерева
             parent = current   
             if newNode.item < current.item:     
                 current = current.left
-            else:
+            elif newNode.item > current.item:
                 current = current.right
+            else:
+                print("такой элемент уже существует!")
+                return
 
         newNode.parent = parent
 
@@ -126,6 +129,7 @@ class Tree():#класс дерева
 
     def deleteItem(self, item):
         print("удаление ", item)
+        before = None
         z = self.nullNode
         node = self.root
         while node != self.nullNode:
@@ -149,6 +153,7 @@ class Tree():#класс дерева
                 z.parent.left = self.nullNode
             elif z.parent.right == z:
                 z.parent.right = self.nullNode
+
         elif z.left == self.nullNode or z.right == self.nullNode:
             #если имеет одного потомка, передаем родителю ссылку на его потомка
             if z.parent.parent.left == z.parent:
@@ -158,13 +163,14 @@ class Tree():#класс дерева
             
             if z.color == 1 and z.parent.color == 1:
                 z.color = 0
+
         else:
             #если у узла два потомка, то меняем его местами с ближайшим бОльшим узлом и удаляем
             y = z.right
             while y.left != self.nullNode:
                 y = y.left
             z.item = y.item
-            y_color = y.color
+            y_color = z.color
             y_parent = y.parent
             if y.right == self.nullNode:
                 if y.item >= y.parent.item:
@@ -177,11 +183,12 @@ class Tree():#класс дерева
                 else:
                     y.parent.left = y.right
             if y_color == 0:
-                print("до балансировки")
+                print("до балансировки: ")
                 self.printTree()
                 self.balanceDelete(y_parent)
-                print("после балансировки")
-                self.printTree()
+
+        print("окончательный результат: ")
+        self.printTree()
 
 
     def balanceDelete(self, x):
@@ -286,7 +293,22 @@ for i in range(n):
     t.insertItem(random.randint(2,150))
 t.printTree()
 
-for i in range(5):
-    a = int(input("число для удаления: "))
-    t.deleteItem(a)
-    t.printTree()
+while(True):
+    a = input("a - добавить, d - удалить, e - выйти ")
+    if a == "e":
+        break
+    
+    inp = a.split(" ")
+    if inp[0] == "a":
+        t.insertItem(int(inp[1]))
+        t.printTree()
+    elif inp[0] == "d":
+        t.deleteItem(int(inp[1]))
+
+
+# t.insertItem(int(a))
+# t.printTree()
+# for i in range(5):
+#     a = int(input("число для удаления: "))
+#     t.deleteItem(a)
+#     t.printTree()

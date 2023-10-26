@@ -1,5 +1,4 @@
 #Алгортим Флойда
-
 import math
 
 n = int(input("введите n: "))
@@ -11,16 +10,12 @@ w = [[0, math.inf, -2, math.inf], #исходная матрица
 [math.inf, math.inf, 0,2],
 [math.inf, -1, math.inf, 0]]
 
-# for i in range(n):
-#     temp = list()
-#     for j in range(n):
-#         a = input("введите число: ")
-#         temp.append(int(a) if a!= "i" else math.inf)
-#     w.append(temp)
-
 print("исходные данные:")
 for i in range(n):
-    print(w[i])
+    for j in range(n):
+        print(w[i][j], end=", ")
+    print()
+
 
 lastIter = w #записываем исходные данные как последнюю итерацию
 
@@ -35,9 +30,16 @@ for k in range(n):
 
     print("результат на итерации :", k+1)
     for i in range(n):
-        print(w[i])
+        for j in range(n):
+            print(w[i][j], end=", ")
+        print()
 
 
 print("результат:")
 for i in range(n):
-    print(w[i])
+        for j in range(n):
+            print(w[i][j], end=", ")
+        print()
+
+
+#убрать скобки

@@ -7,7 +7,7 @@ n = int(input("введите количество чисел: "))
 for i in range(n):
     numbersList.append(random.randint(0, 150))
 
-print("исходный массив: ", numbersList)
+print("исходный массив: ", ",".join(str(n) for n in numbersList))
 
 
 def sort(numsList):
@@ -29,7 +29,18 @@ def sort(numsList):
         else:
             pivots.append(i) #если равен - в массив pivots
 
+
+
+    print("left: ", ", ".join(str(n) for n in left), 
+    "equal: ", ", ".join(str(n) for n in pivots),
+    "right: ", ", ".join(str(n) for n in right))
+    
     return(sort(left) + pivots + sort(right)) #снова вызываем функцию для левой и правой части
 
-print("результат: ", sort(numbersList))
 
+
+print("результат: ", ", ".join(str(n) for n in sort(numbersList)))
+
+
+
+#вывести итерации, убрать скобки в результате
