@@ -41,5 +41,3 @@ for i in range(n):
             print(w[i][j], end=", ")
         print()
 
-
-#убрать скобки
